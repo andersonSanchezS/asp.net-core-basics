@@ -24,6 +24,9 @@ namespace WebApiAuthors.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(Author Author)
         {
+            var exist = await context.Authors.AnyAsync(x => x.name == Author.name);
+            if (exist) return BadRequest($"ya existe un autor con este nombre - {Author.name}");
+
             context.Add(Author);
             await context.SaveChangesAsync();
             return Ok("autor creado");
